@@ -84,10 +84,12 @@ M.register_binding = function(binding)
                     for _, object in ipairs(objects) do
                         table.insert(jump_targets, {
                             buffer = buffer,
-                            line = object.first_line - 1,
-                            length = 1,
-                            column = object.start_column,
                             window = window,
+                            cursor = {
+                                row = object.first_line,
+                                col = object.start_column - 1,
+                            },
+                            length = 1,
                             object = object,
                         })
 
@@ -103,11 +105,12 @@ M.register_binding = function(binding)
                     }
                 end
 
-                require("hop").hint_with_callback(generator, nil, function(target)
-                    local object = target.object
-                    select(object.first_line, object.start_column, object.last_line, object.end_column, visual,
-                        binding.visual_mode == "linewise")
-                end)
+                require("hop").hint_with_callback(generator, require("hop").opts,
+                    function(target)
+                        local object = target.object
+                        select(object.first_line, object.start_column, object.last_line, object.end_column, visual,
+                            binding.visual_mode == "linewise")
+                    end)
             end)
         end
     end
