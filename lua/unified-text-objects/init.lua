@@ -18,8 +18,6 @@ local function register_binding(mode, selector, object, name, callback, options)
 end
 
 local function select(first_line, start_column, last_line, end_column, visual, line_mode)
-    print(tostring(first_line) .. ":" .. tostring(last_line))
-
     local mode = "v"
     if visual then
         mode = ""
