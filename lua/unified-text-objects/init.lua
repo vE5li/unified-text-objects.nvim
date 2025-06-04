@@ -39,7 +39,7 @@ M.register_binding = function(binding)
 
     for _, mode in ipairs(binding.modes) do
         register_binding(mode, "", binding.key, binding.name, function(visual)
-            local object = binding.callback(mode, "cursor")
+            local object = binding.callback(mode, "closest")
 
             if object then
                 select(object.first_line, object.start_column, object.last_line, object.end_column, visual,
