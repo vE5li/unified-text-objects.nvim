@@ -73,6 +73,17 @@ M.register_binding = function(binding)
             register_binding(mode, "e", binding.key, binding.name, function(visual)
                 local objects = binding.callback(mode, "every")
 
+                local win_number = vim.api.nvim_get_current_win()
+                local wininfo = vim.fn.getwininfo(win_number)[1]
+
+                local filtered_objects = {}
+                for _, object in ipairs(objects) do
+                    if object.first_line <= wininfo.botline and
+                        object.last_line >= wininfo.topline then
+                        table.insert(filtered_objects, object)
+                    end
+                end
+
                 -- Generate targets for hop
                 local generator = function()
                     local cursor_position = vim.api.nvim_win_get_cursor(0)
@@ -81,7 +92,7 @@ M.register_binding = function(binding)
                     local jump_targets = {}
                     local indirect_jump_targets = {}
 
-                    for _, object in ipairs(objects) do
+                    for _, object in ipairs(filtered_objects) do
                         table.insert(jump_targets, {
                             buffer = buffer,
                             window = window,
