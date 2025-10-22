@@ -110,6 +110,10 @@ M.register_binding = function(binding)
                         })
                     end
 
+                    -- Sort the hints by distance to the cursor.
+                    local score_comparison = function (a, b) return a.score < b.score end
+                    table.sort(indirect_jump_targets, score_comparison)
+
                     return {
                         jump_targets = jump_targets,
                         indirect_jump_targets = indirect_jump_targets,
